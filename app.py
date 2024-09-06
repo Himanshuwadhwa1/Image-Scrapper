@@ -6,7 +6,11 @@ from urllib.request import urlopen as uReq
 import logging
 import pymongo
 logging.basicConfig(filename="scrapper.log" , level=logging.INFO)
+from dotenv import load_dotenv
 import os
+
+load_dotenv()
+MONGO = os.getenv("MONGO")
 
 app = Flask(__name__)
 
@@ -58,7 +62,7 @@ def index():
                                 img_data.append(mydict)
                                 with open(os.path.join(save_directory, f"{query}_{image_tags.index(image_tag)}.jpg"), "wb") as f:
                                     f.write(image_data)
-                    client = pymongo.MongoClient("Enter your mongodb URL")
+                    client = pymongo.MongoClient(MONGO)
                     db = client['image_scrap']
                     review_col = db['image_scrap_data']
                     review_col.insert_many(img_data)          
